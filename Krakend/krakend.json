@@ -1,0 +1,66 @@
+{
+  "$schema": "https://www.krakend.io/schema/v3.json",
+  "version": 3,
+  "name": "KrakenD - API Gateway for microservices",
+  "timeout": "30000ms",
+  "cache_ttl": "3000s",
+  "extra_config": {
+    "router": {
+      "return_error_msg": true
+    }
+  },
+  "endpoints": [
+    {
+      "endpoint": "/display_order",
+      "method": "GET",
+      "input_query_strings": ["id"],
+      "backend": [
+        {
+          "url_pattern": "/display_report",
+          "method": "GET",
+          "host": [
+            "service1:8081"
+          ]
+        },
+        {
+          "url_pattern": "/display_payment",
+          "method": "GET",
+          "host": [
+            "service2:8082"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/display_all_orders",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/display_all_reports",
+          "method": "GET",
+          "host": [
+            "service1:8081"
+          ],
+          "is_collection": true,
+          "mapping": {
+            "collection": "orders"
+          }
+        },
+        {
+          "url_pattern": "/display_all_payments",
+          "method": "GET",
+          "host": [
+            "service2:8082"
+          ],
+          "is_collection": true,
+          "mapping": {
+            "collection": "payments"
+          }
+        }
+      ]
+    }
+  ],
+  "output_encoding": "json",
+  "debug_endpoint": true,
+  "port": 8080
+}

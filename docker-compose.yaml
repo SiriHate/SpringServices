@@ -1,0 +1,14 @@
+version: '2'
+services:
+  service1:
+    build: ./Backend_Service_1
+    ports:
+      - "8081:8081"
+  service2:
+    build: ./Backend_Service_2
+    ports:
+      - "8082:8082"
+  krakend:
+    build: ./Krakend
+    ports:
+      - "8080:8080"
